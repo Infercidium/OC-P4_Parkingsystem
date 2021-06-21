@@ -3,18 +3,32 @@ package com.parkit.parkingsystem.service;
 import com.parkit.parkingsystem.constants.Fare;
 import com.parkit.parkingsystem.model.Ticket;
 
+import java.time.LocalDateTime;
+
 public class FareCalculatorService {
 
     public void calculateFare(Ticket ticket){
-        if( (ticket.getOutTime() == null) || (ticket.getOutTime().before(ticket.getInTime())) ){
+        if( (ticket.getOutTime() == null) || (ticket.getOutTime().isBefore(ticket.getInTime())) ){
             throw new IllegalArgumentException("Out time provided is incorrect:"+ticket.getOutTime().toString());
         }
+        double duration = 0;
+        for(int i = ticket.getOutTime().getYear(); i > ticket.getInTime().getYear(); i++) { // Boucle Année
+            LocalDateTime year = LocalDateTime.of(i, 12, 31, 00, 00);
+            duration += year.getDayOfYear(); // Ajoute year qui contient le nombre de jours max d'une année (365 ou 366)
+        }
+        duration += (ticket.getOutTime().getDayOfYear() - ticket.getInTime().getDayOfYear());
+        // Ajout du nombre de jour stationné (possiblement négatif si stationné de decembre à janvier mais se soustrait au jour max déjà ajouté)
+        duration *= 24; // Jour converti en heure
+        duration += (ticket.getOutTime().getHour() - ticket.getInTime().getHour());
+        // ajout des heures stationnées (possiblement négatif si stationnné de 9h jour 1 à 7h jour 2 mais se soustrait au jour converti en heure)
+        duration += ((double)(ticket.getOutTime().getMinute() - ticket.getInTime().getMinute())/60);
+        // Ajout des minutes en virgule (si négatif se soustrait au heure déjà présente)
 
-        int inHour = ticket.getInTime().getHours();
-        int outHour = ticket.getOutTime().getHours();
+        //int inHour = ticket.getInTime().getHours();
+        //int outHour = ticket.getOutTime().getHours();
 
         //TODO: Some tests are failing here. Need to check if this logic is correct
-        int duration = outHour - inHour;
+        //int duration = outHour - inHour;
 
         switch (ticket.getParkingSpot().getParkingType()){
             case CAR: {
