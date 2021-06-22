@@ -3,6 +3,7 @@ package com.parkit.parkingsystem.service;
 import com.parkit.parkingsystem.constants.Fare;
 import com.parkit.parkingsystem.model.Ticket;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 
 public class FareCalculatorService {
@@ -11,8 +12,8 @@ public class FareCalculatorService {
         if( (ticket.getOutTime() == null) || (ticket.getOutTime().isBefore(ticket.getInTime())) ){
             throw new IllegalArgumentException("Out time provided is incorrect:"+ticket.getOutTime().toString());
         }
-        double duration = 0;
-        for(int i = ticket.getOutTime().getYear(); i > ticket.getInTime().getYear(); --i) { // Boucle Année
+        double duration = (double)(Duration.between(ticket.getInTime(), ticket.getOutTime()).getSeconds())/3600;
+        /*for(int i = ticket.getOutTime().getYear(); i > ticket.getInTime().getYear(); --i) { // Boucle Année
             LocalDateTime year = LocalDateTime.of(i, 12, 31, 0, 0);
             duration += year.getDayOfYear(); // Ajoute year qui contient le nombre de jours max d'une année (365 ou 366)
         }
@@ -22,7 +23,7 @@ public class FareCalculatorService {
         duration += (ticket.getOutTime().getHour() - ticket.getInTime().getHour());
         // ajout des heures stationnées (possiblement négatif si stationnné de 9h jour 1 à 7h jour 2 mais se soustrait au jour converti en heure)
         duration += ((double)(ticket.getOutTime().getMinute() - ticket.getInTime().getMinute())/60);
-        // Ajout des minutes en virgule (si négatif se soustrait au heure déjà présente)
+        // Ajout des minutes en virgule (si négatif se soustrait au heure déjà présente)*/
 
         if(duration >= Fare.FREE_TIME){
             duration -= Fare.FREE_TIME;
