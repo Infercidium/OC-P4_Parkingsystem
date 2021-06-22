@@ -24,15 +24,15 @@ public class FareCalculatorService {
         duration += ((double)(ticket.getOutTime().getMinute() - ticket.getInTime().getMinute())/60);
         // Ajout des minutes en virgule (si négatif se soustrait au heure déjà présente)
 
-        //int inHour = ticket.getInTime().getHours();
-        //int outHour = ticket.getOutTime().getHours();
-
-        //TODO: Some tests are failing here. Need to check if this logic is correct
-        //int duration = outHour - inHour;
-
+        if(duration >= Fare.FREE_TIME){
+            duration -= Fare.FREE_TIME;
+        }else{
+            duration = 0;
+        }
         switch (ticket.getParkingSpot().getParkingType()){
             case CAR: {
                 ticket.setPrice(duration * Fare.CAR_RATE_PER_HOUR);
+                System.out.println(ticket.getPrice());
                 break;
             }
             case BIKE: {
