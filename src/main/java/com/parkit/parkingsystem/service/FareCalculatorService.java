@@ -12,8 +12,8 @@ public class FareCalculatorService {
             throw new IllegalArgumentException("Out time provided is incorrect:"+ticket.getOutTime().toString());
         }
         double duration = 0;
-        for(int i = ticket.getOutTime().getYear(); i > ticket.getInTime().getYear(); i++) { // Boucle Année
-            LocalDateTime year = LocalDateTime.of(i, 12, 31, 00, 00);
+        for(int i = ticket.getOutTime().getYear(); i > ticket.getInTime().getYear(); --i) { // Boucle Année
+            LocalDateTime year = LocalDateTime.of(i, 12, 31, 0, 0);
             duration += year.getDayOfYear(); // Ajoute year qui contient le nombre de jours max d'une année (365 ou 366)
         }
         duration += (ticket.getOutTime().getDayOfYear() - ticket.getInTime().getDayOfYear());
