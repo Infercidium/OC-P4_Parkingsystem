@@ -3,6 +3,7 @@ package com.parkit.parkingsystem.dao;
 import com.parkit.parkingsystem.config.DataBaseConfig;
 import com.parkit.parkingsystem.constants.DBConstants;
 import com.parkit.parkingsystem.constants.ParkingType;
+import com.parkit.parkingsystem.constants.Regular;
 import com.parkit.parkingsystem.model.ParkingSpot;
 import com.parkit.parkingsystem.model.Ticket;
 import org.apache.logging.log4j.LogManager;
@@ -12,7 +13,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Timestamp;
-import java.time.ZoneOffset;
 
 public class TicketDAO {
 
@@ -86,5 +86,31 @@ public class TicketDAO {
             dataBaseConfig.closeConnection(con);
         }
         return false;
+    }
+    public double checkRegular(Ticket ticket)
+    {
+        Connection con = null;
+        try{
+            con = dataBaseConfig.getConnection();
+            PreparedStatement ps = con.prepareStatement(DBConstants.CHECK_REGULARITY);
+            ps.setString(1, ticket.getVehicleRegNumber());
+            ps.setTimestamp(2, Timestamp.valueOf((ticket.getInTime().minusMonths(Regular.MONTH_FOR_REDUCTION))));
+            ResultSet rs = ps.executeQuery();
+            int regular = 0;
+            while (rs.next())
+            {
+                regular++;
+            }
+            if(regular >= Regular.MINIMUM_REGULAR) {
+                return Regular.REGULAR_REDUCTION;
+            }else{
+                return 1;
+            }
+        }catch (Exception ex){
+            logger.error("Error regular check info",ex);
+        }finally {
+            dataBaseConfig.closeConnection(con);
+        }
+        return 1;
     }
 }
