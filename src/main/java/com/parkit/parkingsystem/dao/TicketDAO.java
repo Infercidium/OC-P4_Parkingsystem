@@ -96,11 +96,8 @@ public class TicketDAO {
             ps.setString(1, ticket.getVehicleRegNumber());
             ps.setTimestamp(2, Timestamp.valueOf((ticket.getInTime().minusMonths(Regular.MONTH_FOR_REDUCTION))));
             ResultSet rs = ps.executeQuery();
-            int regular = 0;
-            while (rs.next())
-            {
-                regular++;
-            }
+            rs.next();
+            int regular = rs.getInt("REGULAR");
             if(regular >= Regular.MINIMUM_REGULAR) {
                 return Regular.REGULAR_REDUCTION;
             }else{

@@ -22,8 +22,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -62,13 +64,12 @@ public class ParkingDataBaseIT {
     public void testParkingACar() throws SQLException, ClassNotFoundException {
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
         parkingService.processIncomingVehicle();
-        DataBaseConfig dataBaseConfig = new DataBaseConfig();
-        Connection con = dataBaseConfig.getConnection();
+        Connection con = dataBaseTestConfig.getConnection();
         PreparedStatement ps = con.prepareStatement(DBConstants.GET_PARKING_SPOT);
         ps.setString(1, String.valueOf(ticketDAO.getTicket("ABCDEF").getParkingSpot().getId()));
         ResultSet rs = ps.executeQuery();
         rs.next();
-        assertEquals(rs.getInt("AVAILABLE"), 0);
+        assertFalse(rs.getBoolean("AVAILABLE"));
         //TODO: check that a ticket is actualy saved in DB and Parking table is updated with availability
     }
 
@@ -77,6 +78,7 @@ public class ParkingDataBaseIT {
         testParkingACar();
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
         parkingService.processExitingVehicle();
+        //Problème assertEquals(LocalDateTime.now(), ticketDAO.getTicket("ABCDEF").getOutTime());
         //TODO: check that the fare generated and out time are populated correctly in the database
     }
 
