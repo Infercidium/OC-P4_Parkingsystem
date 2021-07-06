@@ -12,6 +12,9 @@ import org.apache.logging.log4j.Logger;
 
 import java.time.LocalDateTime;
 
+/**
+ * Parking management
+ */
 public class ParkingService {
 
     private static final Logger logger = LogManager.getLogger("ParkingService");
@@ -22,12 +25,21 @@ public class ParkingService {
     private ParkingSpotDAO parkingSpotDAO;
     private  TicketDAO ticketDAO;
 
+    /**
+     * Parking management builder
+     * @param inputReaderUtil Input reader
+     * @param parkingSpotDAO Parking management
+     * @param ticketDAO Ticket management
+     */
     public ParkingService(InputReaderUtil inputReaderUtil, ParkingSpotDAO parkingSpotDAO, TicketDAO ticketDAO){
         this.inputReaderUtil = inputReaderUtil;
         this.parkingSpotDAO = parkingSpotDAO;
         this.ticketDAO = ticketDAO;
     }
 
+    /**
+     * Drives a vehicle in of the parking lot
+     */
     public void processIncomingVehicle() {
         try{
             ParkingSpot parkingSpot = getNextParkingNumberIfAvailable();
@@ -58,11 +70,20 @@ public class ParkingService {
         }
     }
 
+    /**
+     * Request to enter the license plate of the user vehicle
+     * @return License plate entry reader
+     * @throws Exception Bad registration plate
+     */
     private String getVehichleRegNumber() throws Exception {
         System.out.println("Please type the vehicle registration number and press enter key");
         return inputReaderUtil.readVehicleRegistrationNumber();
     }
 
+    /**
+     * The next available parking space
+     * @return The parking space available
+     */
     public ParkingSpot getNextParkingNumberIfAvailable(){
         int parkingNumber=0;
         ParkingSpot parkingSpot = null;
@@ -82,6 +103,10 @@ public class ParkingService {
         return parkingSpot;
     }
 
+    /**
+     * Enter the type of vehicle to park
+     * @return The type of vehicle
+     */
     private ParkingType getVehichleType(){
         System.out.println("Please select vehicle type from menu");
         System.out.println("1 CAR");
@@ -101,6 +126,9 @@ public class ParkingService {
         }
     }
 
+    /**
+     * Drives a vehicle out of the parking lot
+     */
     public void processExitingVehicle() {
         try{
             String vehicleRegNumber = getVehichleRegNumber();

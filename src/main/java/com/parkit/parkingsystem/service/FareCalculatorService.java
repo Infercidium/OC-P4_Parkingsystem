@@ -6,13 +6,24 @@ import com.parkit.parkingsystem.model.Ticket;
 
 import java.time.Duration;
 
+/**
+ * Calculate the price
+ */
 public class FareCalculatorService {
 
-    private  TicketDAO ticketDAO= new TicketDAO();
+    private final TicketDAO ticketDAO = new TicketDAO();
 
-    public void calculateFare(Ticket ticket){
-        if( (ticket.getOutTime() == null) || (ticket.getOutTime().isBefore(ticket.getInTime())) ){
-            throw new IllegalArgumentException("Out time provided is incorrect:"+ticket.getOutTime().toString());
+    /**
+     * Set a price using the date of entry, exit and whether the user is regulated
+     * @param ticket Ticket containing vehicle entry and exit information
+     */
+    public void calculateFare(Ticket ticket) {
+        if ( (ticket.getOutTime() == null) || (ticket.getOutTime().isBefore(ticket.getInTime())) ){
+            if (ticket.getOutTime() != null) {
+                throw new IllegalArgumentException("Out time provided is incorrect:"+ticket.getOutTime().toString());
+            }else{
+                throw new IllegalArgumentException("Out time provided is null");
+            }
         }
         double duration = (double)(Duration.between(ticket.getInTime(), ticket.getOutTime()).getSeconds())/3600;
 

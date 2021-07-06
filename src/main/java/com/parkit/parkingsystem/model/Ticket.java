@@ -2,6 +2,9 @@ package com.parkit.parkingsystem.model;
 
 import java.time.LocalDateTime;
 
+/**
+ * Contains all the information of the vehicle and associated parking
+ */
 public class Ticket {
     private int id;
     private ParkingSpot parkingSpot;
@@ -58,6 +61,10 @@ public class Ticket {
         this.outTime = outTime;
     }
 
+    /**
+     * Display the ticket in the console
+     * @return Ticket information in character string
+     */
     @Override
     public String toString() {
         return "Ticket{" +

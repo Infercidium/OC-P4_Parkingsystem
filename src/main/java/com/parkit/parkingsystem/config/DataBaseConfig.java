@@ -5,10 +5,20 @@ import org.apache.logging.log4j.Logger;
 
 import java.sql.*;
 
+/**
+ * Management of the connection with the SQL database and of this information
+ */
 public class DataBaseConfig {
 
     private static final Logger logger = LogManager.getLogger("DataBaseConfig");
 
+    /**
+     * Used to connect to the SQL database
+     * @return the connection to the database
+     * @throws ClassNotFoundException Thrown when an application tries to load in a class through its string name using:
+     * The forName method in class Class but no definition for the class with the specified name could be found.
+     * @throws SQLException An exception that provides information on a database access error or other errors.
+     */
     public Connection getConnection() throws ClassNotFoundException, SQLException {
         logger.info("Create DB connection");
         Class.forName("com.mysql.cj.jdbc.Driver");
@@ -16,6 +26,10 @@ public class DataBaseConfig {
                 "jdbc:mysql://localhost:3306/prod?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC&autoReconnect=true&useSSL=false","root","rootroot");
     }
 
+    /**
+     * Used to disconnect to the SQL database
+     * @param con the connection to the database
+     */
     public void closeConnection(Connection con){
         if(con!=null){
             try {
@@ -27,6 +41,10 @@ public class DataBaseConfig {
         }
     }
 
+    /**
+     * Close the PreparedStatement with error handling
+     * @param ps PreparedStatement open
+     */
     public void closePreparedStatement(PreparedStatement ps) {
         if(ps!=null){
             try {
@@ -38,6 +56,10 @@ public class DataBaseConfig {
         }
     }
 
+    /**
+     * Close the ResultSet with error handling
+     * @param rs ResultSet open
+     */
     public void closeResultSet(ResultSet rs) {
         if(rs!=null){
             try {

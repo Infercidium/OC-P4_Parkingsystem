@@ -23,6 +23,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -70,16 +71,17 @@ public class ParkingDataBaseIT {
         ResultSet rs = ps.executeQuery();
         rs.next();
         assertFalse(rs.getBoolean("AVAILABLE"));
-        //TODO: check that a ticket is actualy saved in DB and Parking table is updated with availability
     }
 
     @Test
     public void testParkingLotExit() throws SQLException, ClassNotFoundException {
         testParkingACar();
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+        ticketDAO.updateTestTicket(ticketDAO.getTicket("ABCDEF"));
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("uuuu-MM-dd'T'HH:mm:ss");
+        LocalDateTime verif = LocalDateTime.now();
         parkingService.processExitingVehicle();
-        //Problème assertEquals(LocalDateTime.now(), ticketDAO.getTicket("ABCDEF").getOutTime());
-        //TODO: check that the fare generated and out time are populated correctly in the database
+        assertEquals(verif.format(formatter), ticketDAO.getTestTicket("ABCDEF").getOutTime().format(formatter));
     }
 
 }

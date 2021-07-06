@@ -5,11 +5,18 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.Scanner;
 
+/**
+ * Input reader
+ */
 public class InputReaderUtil {
 
     private static Scanner scan = new Scanner(System.in);
     private static final Logger logger = LogManager.getLogger("InputReaderUtil");
 
+    /**
+     * Read user input
+     * @return input
+     */
     public int readSelection() {
         try {
             int input = Integer.parseInt(scan.nextLine());
@@ -21,6 +28,11 @@ public class InputReaderUtil {
         }
     }
 
+    /**
+     * Entering the license plate
+     * @return The registration plate
+     * @throws Exception Bad registration plate
+     */
     public String readVehicleRegistrationNumber() throws Exception {
         try {
             String vehicleRegNumber= scan.nextLine();
