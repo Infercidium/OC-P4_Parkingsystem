@@ -5,16 +5,22 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 /**
- * App class containing the main method to start the application
+ * App class containing the main method to start the application.
  */
-public class App {
-    private static final Logger logger = LogManager.getLogger("App");
+public final class App {
+    private App() { }
 
     /**
-     * Main method initializing the application
+     * Instancie Logger.
      */
-    public static void main(String[] args){
-        logger.info("Initializing Parking System");
+    private static final Logger LOGGER = LogManager.getLogger("App");
+
+    /**
+     * Main method initializing the application.
+     * @param args Tableau de chaînes servant à executer le programme.
+     */
+    public static void main(final String[] args) {
+        LOGGER.info("Initializing Parking System");
         InteractiveShell.loadInterface();
 
     }

@@ -64,16 +64,15 @@
             <artifactId>junit-vintage-engine</artifactId>
             <version>5.7.0</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.jvnet.hudson.plugins/checkstyle -->
-        <dependency>
-            <groupId>org.jvnet.hudson.plugins</groupId>
-            <artifactId>checkstyle</artifactId>
-            <version>3.11</version>
-        </dependency>
     </dependencies>
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.jvnet.hudson.plugins</groupId>
+                <artifactId>checkstyle</artifactId>
+                <version>3.11</version>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
@@ -156,6 +155,10 @@
                             <artifactId>jacoco-maven-plugin</artifactId>
                             <version>0.8.5</version>
                         </plugin>
+                        <plugin><groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-checkstyle-plugin</artifactId>
+                            <version>3.1.2</version>
+                        </plugin>
                     </reportPlugins>
                 </configuration>
             </plugin>
@@ -180,4 +183,16 @@
             </plugin>
         </plugins>
     </build>
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>3.1.2</version>
+                <configuration>
+                    <configLocation>checkstyle.xml</configLocation>
+                </configuration>
+            </plugin>
+        </plugins>
+    </reporting>
 </project>
