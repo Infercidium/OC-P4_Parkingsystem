@@ -21,8 +21,8 @@ public class FareCalculatorService {
      * @param ticket Ticket containing vehicle entry and exit information.
      */
     public void calculateFare(final Ticket ticket) {
-        if ((ticket.getOutTime() == null)
-                || (ticket.getOutTime().isBefore(ticket.getInTime()))) {
+        if (ticket.getOutTime() == null
+                || ticket.getOutTime().isBefore(ticket.getInTime())) {
             if (ticket.getOutTime() != null) {
                 throw new IllegalArgumentException(
                         "Out time provided is incorrect:"

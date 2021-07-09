@@ -80,5 +80,4 @@ public class ParkingDataBaseIT {
         parkingService.processExitingVehicle();
         assertEquals(verif.format(formatter), ticketDAO.getTestTicket("ABCDEF").getOutTime().format(formatter));
     }
-
 }

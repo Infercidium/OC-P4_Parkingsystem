@@ -46,7 +46,7 @@ public class TicketDAO {
             ps.setDouble(Index.THREE, ticket.getPrice());
             ps.setTimestamp(Index.FOUR, Timestamp.valueOf(ticket.getInTime()));
             ps.setTimestamp(Index.FIVE, (ticket.getOutTime() == null)
-                    ? null : (Timestamp.valueOf(ticket.getOutTime())));
+                    ? null : Timestamp.valueOf(ticket.getOutTime()));
             ps.execute();
             return true;
         } catch (Exception ex) {
@@ -119,8 +119,8 @@ public class TicketDAO {
             dataBaseConfig.closeResultSet(rs);
             dataBaseConfig.closePreparedStatement(ps);
             dataBaseConfig.closeConnection(con);
-            return ticket;
         }
+        return ticket;
     }
     /**
      * Updates the requested ticket.
@@ -183,10 +183,12 @@ public class TicketDAO {
             con = dataBaseConfig.getConnection();
             ps = con.prepareStatement(DBConstants.CHECK_REGULARITY);
             ps.setString(Index.ONE, ticket.getVehicleRegNumber());
-            ps.setTimestamp(Index.TWO, Timestamp.valueOf((ticket.getInTime()
-                    .minusMonths(Regular.MONTH_FOR_REDUCTION))));
+            ps.setTimestamp(Index.TWO, Timestamp.valueOf(ticket.getInTime()
+                    .minusMonths(Regular.MONTH_FOR_REDUCTION)));
             rs = ps.executeQuery();
-            rs.next();
+            if (rs != null) {
+                rs.next();
+            }
             int regular = rs.getInt("REGULAR");
             if (regular >= Regular.MINIMUM_REGULAR) {
                 return Regular.REGULAR_REDUCTION;
