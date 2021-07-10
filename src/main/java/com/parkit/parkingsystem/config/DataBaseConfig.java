@@ -38,7 +38,7 @@ public class DataBaseConfig {
         Connection connection = null;
         InputStream is = null;
         try {
-            is = getClass().getResourceAsStream(
+            is = getClass().getClassLoader().getResourceAsStream(
                     "/dataConfig.properties");
             p.load(is);
             is.close();

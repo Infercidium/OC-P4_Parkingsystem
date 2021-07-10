@@ -1,7 +1,6 @@
 package com.parkit.parkingsystem.service;
 
 import com.parkit.parkingsystem.constants.Fare;
-import com.parkit.parkingsystem.dao.TicketDAO;
 import com.parkit.parkingsystem.model.Ticket;
 
 import java.time.Duration;
@@ -10,17 +9,14 @@ import java.time.Duration;
  * Calculate the price.
  */
 public class FareCalculatorService {
-    /**
-     * Instancie TicketDAO.
-     */
-    private final TicketDAO ticketDAO = new TicketDAO();
 
     /**
      * Set a price using the date of entry,
      * exit and whether the user is regulated.
      * @param ticket Ticket containing vehicle entry and exit information.
+     * @param regular Double containing reduction.
      */
-    public void calculateFare(final Ticket ticket) {
+    public void calculateFare(final Ticket ticket, final double regular) {
         if (ticket.getOutTime() == null
                 || ticket.getOutTime().isBefore(ticket.getInTime())) {
             if (ticket.getOutTime() != null) {
@@ -43,13 +39,13 @@ public class FareCalculatorService {
         switch (ticket.getParkingSpot().getParkingType()) {
             case CAR: {
                 ticket.setPrice(Math.round(((duration * Fare.CAR_RATE_PER_HOUR)
-                        * ticketDAO.checkRegular(ticket))
+                        * regular)
                         * Fare.ROUND) / Fare.ROUND);
                 break;
             }
             case BIKE: {
                 ticket.setPrice(Math.round(((duration * Fare.BIKE_RATE_PER_HOUR)
-                        * ticketDAO.checkRegular(ticket))
+                        * regular)
                         * Fare.ROUND) / Fare.ROUND);
                 break;
             }

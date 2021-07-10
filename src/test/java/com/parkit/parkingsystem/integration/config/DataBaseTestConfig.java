@@ -1,17 +1,26 @@
 package com.parkit.parkingsystem.integration.config;
 
 import com.parkit.parkingsystem.config.DataBaseConfig;
+import com.parkit.parkingsystem.constants.DBConstants;
+import com.parkit.parkingsystem.constants.Index;
+import com.parkit.parkingsystem.constants.Regular;
+import com.parkit.parkingsystem.model.Ticket;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Timestamp;
 
 /**
  *  Management of the connection with the SQL database and of this information, for test
  */
 public class DataBaseTestConfig extends DataBaseConfig {
 
-    private static final Logger logger = LogManager.getLogger("DataBaseTestConfig");
+    private static final Logger LOGGER = LogManager.getLogger("DataBaseTestConfig");
 
     /**
      *  Used to connect to the SQL database
@@ -21,10 +30,11 @@ public class DataBaseTestConfig extends DataBaseConfig {
      * @throws SQLException An exception that provides information on a database access error or other errors.
      */
     public Connection getConnection() throws ClassNotFoundException, SQLException {
-        logger.info("Create DB connection");
+        LOGGER.info("Create DB connection");
         Class.forName("com.mysql.cj.jdbc.Driver");
         return DriverManager.getConnection(
                 "jdbc:mysql://localhost:3306/test?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC&autoReconnect=true&useSSL=false","root","rootroot");
+
     }
 
     /**
@@ -35,9 +45,9 @@ public class DataBaseTestConfig extends DataBaseConfig {
         if(con!=null){
             try {
                 con.close();
-                logger.info("Closing DB connection");
+                LOGGER.info("Closing DB connection");
             } catch (SQLException e) {
-                logger.error("Error while closing connection",e);
+                LOGGER.error("Error while closing connection",e);
             }
         }
     }
@@ -50,9 +60,9 @@ public class DataBaseTestConfig extends DataBaseConfig {
         if(ps!=null){
             try {
                 ps.close();
-                logger.info("Closing Prepared Statement");
+                LOGGER.info("Closing Prepared Statement");
             } catch (SQLException e) {
-                logger.error("Error while closing prepared statement",e);
+                LOGGER.error("Error while closing prepared statement",e);
             }
         }
     }
@@ -65,10 +75,45 @@ public class DataBaseTestConfig extends DataBaseConfig {
         if(rs!=null){
             try {
                 rs.close();
-                logger.info("Closing Result Set");
+                LOGGER.info("Closing Result Set");
             } catch (SQLException e) {
-                logger.error("Error while closing result set",e);
+                LOGGER.error("Error while closing result set",e);
             }
         }
+    }
+    /**
+     * Checks the regularity of a user's vehicle.
+     * @param ticket Ticket of the vehicle concerned.
+     * @return The multiplier used to apply the reduction.
+     */
+    public double checkRegularTest(final Ticket ticket) {
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        DataBaseTestConfig dataBaseTestConfig = new DataBaseTestConfig();
+        try {
+            con = dataBaseTestConfig.getConnection();
+            ps = con.prepareStatement(DBConstants.CHECK_REGULARITY);
+            ps.setString(Index.ONE, ticket.getVehicleRegNumber());
+            ps.setTimestamp(Index.TWO, Timestamp.valueOf(ticket.getInTime()
+                    .minusMonths(Regular.MONTH_FOR_REDUCTION)));
+            rs = ps.executeQuery();
+            if (rs != null) {
+                rs.next();
+            }
+            int regular = rs.getInt("REGULAR");
+            if (regular >= Regular.MINIMUM_REGULAR) {
+                return Regular.REGULAR_REDUCTION;
+            } else {
+                return 1;
+            }
+        } catch (Exception ex) {
+            LOGGER.error("Error regular check info", ex);
+        } finally {
+            dataBaseTestConfig.closeResultSet(rs);
+            dataBaseTestConfig.closePreparedStatement(ps);
+            dataBaseTestConfig.closeConnection(con);
+        }
+        return 1;
     }
 }

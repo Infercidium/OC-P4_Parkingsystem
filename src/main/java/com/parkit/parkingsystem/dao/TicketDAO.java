@@ -170,17 +170,20 @@ public class TicketDAO {
         }
         return false;
     }
+
     /**
-     * Checks the regularity of a user's vehicle.
+     * Checks the regularity of a user's vehicle for test.
      * @param ticket Ticket of the vehicle concerned.
+     * @param dataBaseTConfig DataBase concerned.
      * @return The multiplier used to apply the reduction.
      */
-    public double checkRegular(final Ticket ticket) {
+    public double checkRegular(final Ticket ticket,
+                               final DataBaseConfig dataBaseTConfig) {
         Connection con = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
         try {
-            con = dataBaseConfig.getConnection();
+            con = dataBaseTConfig.getConnection();
             ps = con.prepareStatement(DBConstants.CHECK_REGULARITY);
             ps.setString(Index.ONE, ticket.getVehicleRegNumber());
             ps.setTimestamp(Index.TWO, Timestamp.valueOf(ticket.getInTime()
@@ -198,9 +201,9 @@ public class TicketDAO {
         } catch (Exception ex) {
             LOGGER.error("Error regular check info", ex);
         } finally {
-            dataBaseConfig.closeResultSet(rs);
-            dataBaseConfig.closePreparedStatement(ps);
-            dataBaseConfig.closeConnection(con);
+            dataBaseTConfig.closeResultSet(rs);
+            dataBaseTConfig.closePreparedStatement(ps);
+            dataBaseTConfig.closeConnection(con);
         }
         return 1;
     }

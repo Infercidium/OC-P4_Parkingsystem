@@ -37,11 +37,13 @@ public final class InteractiveShell {
             int option = inputReaderUtil.readSelection();
             switch (option) {
                 case 1: {
-                    parkingService.processIncomingVehicle();
+                    parkingService.processIncomingVehicle(
+                            ticketDAO.getDataBaseConfig());
                     break;
                 }
                 case 2: {
-                    parkingService.processExitingVehicle();
+                    parkingService.processExitingVehicle(
+                            ticketDAO.getDataBaseConfig());
                     break;
                 }
                 case 3: {

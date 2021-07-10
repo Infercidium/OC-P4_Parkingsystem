@@ -1,5 +1,6 @@
 package com.parkit.parkingsystem.service;
 
+import com.parkit.parkingsystem.config.DataBaseConfig;
 import com.parkit.parkingsystem.constants.ParkingType;
 import com.parkit.parkingsystem.constants.Regular;
 import com.parkit.parkingsystem.dao.ParkingSpotDAO;
@@ -54,8 +55,9 @@ public class ParkingService {
 
     /**
      * Drives a vehicle in of the parking lot.
+     * @param dataBase for use checkRegular.
      */
-    public void processIncomingVehicle() {
+    public void processIncomingVehicle(final DataBaseConfig dataBase) {
         try {
             ParkingSpot parkingSpot = getNextParkingNumberIfAvailable();
             if (parkingSpot != null && parkingSpot.getId() > 0) {
@@ -75,7 +77,7 @@ public class ParkingService {
                 ticket.setOutTime(null);
                 ticketDAO.saveTicket(ticket);
                 if (Regular.REGULAR_REDUCTION.equals(
-                        ticketDAO.checkRegular(ticket))) {
+                        ticketDAO.checkRegular(ticket, dataBase))) {
                     System.out.println("Welcome back! "
                             + "As a recurring user of our parking lot, "
                             + "you'll benefit from a 5% discount.");
@@ -151,14 +153,16 @@ public class ParkingService {
 
     /**
      * Drives a vehicle out of the parking lot.
+     *  @param dataBase for use checkRegular.
      */
-    public void processExitingVehicle() {
+    public void processExitingVehicle(final DataBaseConfig dataBase) {
         try {
             String vehicleRegNumber = getVehichleRegNumber();
             Ticket ticket = ticketDAO.getTicket(vehicleRegNumber);
             LocalDateTime outTime = LocalDateTime.now();
             ticket.setOutTime(outTime);
-            fareCalculatorService.calculateFare(ticket);
+            double regular = ticketDAO.checkRegular(ticket, dataBase);
+            fareCalculatorService.calculateFare(ticket, regular);
             if (ticketDAO.updateTicket(ticket)) {
                 ParkingSpot parkingSpot = ticket.getParkingSpot();
                 parkingSpot.setAvailable(true);

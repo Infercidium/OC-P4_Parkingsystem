@@ -3,6 +3,7 @@ package com.parkit.parkingsystem;
 import com.parkit.parkingsystem.constants.ParkingType;
 import com.parkit.parkingsystem.dao.ParkingSpotDAO;
 import com.parkit.parkingsystem.dao.TicketDAO;
+import com.parkit.parkingsystem.integration.config.DataBaseTestConfig;
 import com.parkit.parkingsystem.model.ParkingSpot;
 import com.parkit.parkingsystem.model.Ticket;
 import com.parkit.parkingsystem.service.ParkingService;
@@ -22,6 +23,7 @@ import static org.mockito.Mockito.*;
 public class ParkingServiceTest {
 
     private static ParkingService parkingService;
+    private DataBaseTestConfig dataBaseTestConfig = new DataBaseTestConfig();
 
     @Mock
     private static InputReaderUtil inputReaderUtil;
@@ -51,11 +53,17 @@ public class ParkingServiceTest {
             throw  new RuntimeException("Failed to set up test mock objects");
         }
     }
+    @Test
+    public void processIncomingVehicleTest() {
+        processExitingVehicleTest();
+        when(inputReaderUtil.readSelection()).thenReturn(1);
+        parkingService.processIncomingVehicle(dataBaseTestConfig);
+        System.out.println(parkingSpotDAO);
+    } //TODO Finir le test.
 
     @Test
     public void processExitingVehicleTest(){
-        parkingService.processExitingVehicle();
+        parkingService.processExitingVehicle(dataBaseTestConfig);
         verify(parkingSpotDAO, Mockito.times(1)).updateParking(any(ParkingSpot.class));
-    }
-
+    } //TODO Doute sur son bon fonctionnement.
 }
