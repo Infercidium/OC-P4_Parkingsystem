@@ -31,6 +31,7 @@ public class TicketDAOTest {
     @Test
     public void getTicketTest() {
         ticket = ticketDAO.getTicket("ABCDEF");
+        ticket = ticketDAO.getTestTicket("ABCDEF");
         assertNotNull(ticket);
     }
 

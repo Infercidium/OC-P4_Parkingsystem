@@ -53,17 +53,19 @@ public class ParkingServiceTest {
             throw  new RuntimeException("Failed to set up test mock objects");
         }
     }
-    @Test
-    public void processIncomingVehicleTest() {
-        processExitingVehicleTest();
-        when(inputReaderUtil.readSelection()).thenReturn(1);
-        parkingService.processIncomingVehicle(dataBaseTestConfig);
-        System.out.println(parkingSpotDAO);
-    } //TODO Finir le test.
 
     @Test
-    public void processExitingVehicleTest(){
+    public void processExitingVehicleTest() {
         parkingService.processExitingVehicle(dataBaseTestConfig);
         verify(parkingSpotDAO, Mockito.times(1)).updateParking(any(ParkingSpot.class));
-    } //TODO Doute sur son bon fonctionnement.
+    }
+
+   // @Test
+    /*public void processIncomingVehicleTest() {
+        when(inputReaderUtil.readSelection()).thenReturn(1);
+        parkingService.processIncomingVehicle(dataBaseTestConfig);
+    } //TODO Finir le test.*/
+
+   // @Test
+    //public void getNextParkingNumberIfAvailableTest() {}
 }
