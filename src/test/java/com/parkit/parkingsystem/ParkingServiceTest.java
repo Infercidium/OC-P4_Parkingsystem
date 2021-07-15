@@ -59,13 +59,4 @@ public class ParkingServiceTest {
         parkingService.processExitingVehicle(dataBaseTestConfig);
         verify(parkingSpotDAO, Mockito.times(1)).updateParking(any(ParkingSpot.class));
     }
-
-   // @Test
-    /*public void processIncomingVehicleTest() {
-        when(inputReaderUtil.readSelection()).thenReturn(1);
-        parkingService.processIncomingVehicle(dataBaseTestConfig);
-    } //TODO Finir le test.*/
-
-   // @Test
-    //public void getNextParkingNumberIfAvailableTest() {}
 }
