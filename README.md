@@ -47,3 +47,15 @@ The app has unit tests and integration tests written. More of these need to be a
 To run the tests from maven, go to the folder that contains the pom.xml file and execute the below command.
 
 `mvn clean integration-test site`
+
+### Launch
+
+To launch the application from a command prompt, you must create a launcher with:
+
+`mvn package`
+
+Puis depuis le terminal de votre IDE ou depuis le répertoire Parking System :
+
+`java -jar target/parking-system-1.0-SNAPSHOT-jar-with-dependencies.jar`
+
+It is quite possible to start the program by omitting `target/` if the command prompt is located in the target directory of Parking System.
