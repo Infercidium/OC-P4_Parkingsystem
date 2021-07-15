@@ -3,7 +3,6 @@ package com.parkit.parkingsystem.config;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -40,8 +39,8 @@ public class DataBaseConfig {
         Connection connection = null;
         InputStream is = null;
         try {
-            is = new FileInputStream(
-                    "src/main/resources/dataConfig.properties");
+            is = this.getClass().getClassLoader()
+                    .getResourceAsStream("dataConfig.properties");
             p.load(is);
             LOGGER.info("Create DB connection");
             Class.forName("com.mysql.cj.jdbc.Driver");

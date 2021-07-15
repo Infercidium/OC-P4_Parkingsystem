@@ -29,4 +29,8 @@ public final class Index {
      * Column 6.
      */
     public static final int SIX = 6;
+    /**
+     * Option Exit.
+     */
+    public static final int EXIT = 3;
 }

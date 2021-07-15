@@ -1,5 +1,6 @@
 package com.parkit.parkingsystem.service;
 
+import com.parkit.parkingsystem.constants.Index;
 import com.parkit.parkingsystem.dao.ParkingSpotDAO;
 import com.parkit.parkingsystem.dao.TicketDAO;
 import com.parkit.parkingsystem.util.InputReaderUtil;
@@ -46,7 +47,7 @@ public final class InteractiveShell {
                             ticketDAO.getDataBaseConfig());
                     break;
                 }
-                case 3: {
+                case Index.EXIT: {
                     System.out.println("Exiting from the system!");
                     continueApp = false;
                     break;

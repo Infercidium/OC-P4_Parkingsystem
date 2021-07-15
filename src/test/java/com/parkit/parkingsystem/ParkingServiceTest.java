@@ -23,7 +23,7 @@ import static org.mockito.Mockito.*;
 public class ParkingServiceTest {
 
     private static ParkingService parkingService;
-    private DataBaseTestConfig dataBaseTestConfig = new DataBaseTestConfig();
+    private final DataBaseTestConfig dataBaseTestConfig = new DataBaseTestConfig();
 
     @Mock
     private static InputReaderUtil inputReaderUtil;

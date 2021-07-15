@@ -12,7 +12,7 @@ public class InputReaderUtil {
     /**
      * Instancie Scanner.
      */
-    private static Scanner scan = new Scanner(System.in, "UTF-8");
+    private static final Scanner SCAN = new Scanner(System.in, "UTF-8");
     /**
      * Instancie Logger.
      */
@@ -25,7 +25,7 @@ public class InputReaderUtil {
      */
     public int readSelection() {
         try {
-            int input = Integer.parseInt(scan.nextLine());
+            int input = Integer.parseInt(SCAN.nextLine());
             return input;
         } catch (Exception e) {
             LOGGER.error("Error while reading user input from Shell", e);
@@ -38,11 +38,10 @@ public class InputReaderUtil {
     /**
      * Entering the license plate.
      * @return The registration plate.
-     * @throws Exception Bad registration plate.
      */
-    public String readVehicleRegistrationNumber() throws Exception {
+    public String readVehicleRegistrationNumber() {
         try {
-            String vehicleRegNumber = scan.nextLine();
+            String vehicleRegNumber = SCAN.nextLine();
             if (vehicleRegNumber == null
                     || vehicleRegNumber.trim().length() == 0) {
                 throw new IllegalArgumentException("Invalid input provided");

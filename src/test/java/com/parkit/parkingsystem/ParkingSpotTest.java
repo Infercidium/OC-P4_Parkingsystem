@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ParkingSpotTest {
-    private ParkingSpot parkingSpot = new ParkingSpot(4, ParkingType.CAR, true);
+    private final ParkingSpot parkingSpot = new ParkingSpot(4, ParkingType.CAR, true);
 
     @Test
     public void equalsTest() {

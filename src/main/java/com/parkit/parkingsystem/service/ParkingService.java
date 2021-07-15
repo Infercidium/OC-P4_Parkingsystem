@@ -24,20 +24,20 @@ public class ParkingService {
     /**
      * Instancie FareCalculatorService.
      */
-    private static FareCalculatorService fareCalculatorService
+    private static final FareCalculatorService FARE_CALCULATOR_SERVICE
             = new FareCalculatorService();
     /**
      * Instancie InputReaderUtil.
      */
-    private InputReaderUtil inputReaderUtil;
+    private final InputReaderUtil inputReaderUtil;
     /**
      * Instancie ParkingSpotDAO.
      */
-    private ParkingSpotDAO parkingSpotDAO;
+    private final ParkingSpotDAO parkingSpotDAO;
     /**
      * Instancie TicketDAO.
      */
-    private  TicketDAO ticketDAO;
+    private final TicketDAO ticketDAO;
 
     /**
      * Parking management builder.
@@ -96,9 +96,8 @@ public class ParkingService {
     /**
      * Request to enter the license plate of the user vehicle.
      * @return License plate entry reader.
-     * @throws Exception Bad registration plate.
      */
-    private String getVehichleRegNumber() throws Exception {
+    private String getVehichleRegNumber() {
         System.out.println("Please type the vehicle registration number "
                 + "and press enter key");
         return inputReaderUtil.readVehicleRegistrationNumber();
@@ -162,7 +161,7 @@ public class ParkingService {
             LocalDateTime outTime = LocalDateTime.now();
             ticket.setOutTime(outTime);
             double regular = ticketDAO.checkRegular(ticket, dataBase);
-            fareCalculatorService.calculateFare(ticket, regular);
+            FARE_CALCULATOR_SERVICE.calculateFare(ticket, regular);
             if (ticketDAO.updateTicket(ticket)) {
                 ParkingSpot parkingSpot = ticket.getParkingSpot();
                 parkingSpot.setAvailable(true);

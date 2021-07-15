@@ -5,6 +5,7 @@ import com.parkit.parkingsystem.integration.config.DataBaseTestConfig;
 import com.parkit.parkingsystem.model.Ticket;
 import com.parkit.parkingsystem.service.FareCalculatorService;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
@@ -19,40 +20,37 @@ public class TicketDAOTest {
     private static TicketDAO ticketDAO;
     private static Ticket ticket;
     private final FareCalculatorService fcs = new FareCalculatorService();
-
     @BeforeAll
    private static void setUp() {
        ticketDAO = new TicketDAO();
        ticketDAO.setDataBaseConfig(dataBaseTestConfig);
        ticket = new Ticket();
    }
-
-
-    @Test
-    public void getTicketTest() {
+    @BeforeEach
+    public void setUpPerTest() {
         ticket = ticketDAO.getTicket("ABCDEF");
-        ticket = ticketDAO.getTestTicket("ABCDEF");
-        assertNotNull(ticket);
     }
 
     @Test
+    public void getTicketTest() {
+        ticket = ticketDAO.getTestTicket("ABCDEF");
+        assertNotNull(ticket);
+    }
+    @Test
     public void checkRegularTest() {
-       getTicketTest();
        double regular = ticketDAO.checkRegular(ticket, dataBaseTestConfig);
        assertEquals(1, (int)regular);
     }
 
     @Test
     public void saveTicketTest() {
-       getTicketTest();
        boolean reussite = ticketDAO.saveTicket(ticket);
        assertTrue(reussite);
     }
 
     @Test
     public void updateTicketTest() {
-       getTicketTest();
-        LocalDateTime outTime = LocalDateTime.now();
+        LocalDateTime outTime = LocalDateTime.now().plusHours(1);
         ticket.setOutTime(outTime);
         double regular = ticketDAO.checkRegular(ticket, dataBaseTestConfig);
         fcs.calculateFare(ticket, regular);
@@ -61,8 +59,7 @@ public class TicketDAOTest {
     }
     @Test
     public void updateTestTicketTest() {
-        getTicketTest();
-        LocalDateTime outTime = LocalDateTime.now();
+        LocalDateTime outTime = LocalDateTime.now().plusHours(1);
         ticket.setOutTime(outTime);
         double regular = ticketDAO.checkRegular(ticket, dataBaseTestConfig);
         fcs.calculateFare(ticket, regular);
