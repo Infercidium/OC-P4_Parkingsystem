@@ -4,7 +4,6 @@ package com.parkit.parkingsystem.constants;
  * Column and paramater index.
  */
 public final class Index {
-    private Index() { }
     /**
      * Column 1.
      */
