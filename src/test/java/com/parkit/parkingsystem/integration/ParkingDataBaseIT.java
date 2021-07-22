@@ -69,6 +69,8 @@ public class ParkingDataBaseIT {
         ps.setString(1, String.valueOf(ticketDAO.getTicket("ABCDEF").getParkingSpot().getId()));
         ResultSet rs = ps.executeQuery();
         rs.next();
+        LocalDateTime inTime = ticketDAO.getTicket("ABCDEF").getInTime();
+        assertEquals("Ticket{id=1, parkingSpot=com.parkit.parkingsystem.model.ParkingSpot@1, vehicleRegNumber='ABCDEF', price=0.0, inTime=" + inTime + ", outTime=null}",ticketDAO.getTicket("ABCDEF").toString());
         assertFalse(rs.getBoolean("AVAILABLE"));
     }
 
@@ -94,6 +96,7 @@ public class ParkingDataBaseIT {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("uuuu-MM-dd'T'HH:mm");
         parkingService.processExitingVehicle(dataBaseTestConfig);
         LocalDateTime verif = LocalDateTime.now();
+        assertEquals(0.75, ticketDAO.getTestTicket("ABCDEF").getPrice());
         assertEquals(verif.format(formatter), ticketDAO.getTestTicket("ABCDEF").getOutTime().format(formatter));
     }
 
